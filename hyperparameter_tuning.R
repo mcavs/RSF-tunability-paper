@@ -38,12 +38,12 @@ optimize_rsf_10fold <- function(ntree_values = c(100, 200, 500, 1000, 2000),
     }
   }
   
-  print("📊 10-FOLD CV SONUÇLARI 📊")
+  print(" 10-FOLD CV SONUÇLARI ")
   print(results)
   
   
   best_model <- results[which.max(results$c_index), ]
-  print("🚀 EN İYİ HİPERPARAMETRE KOMBİNASYONU 🚀")
+  print(" EN İYİ HİPERPARAMETRE KOMBİNASYONU ")
   print(best_model)
   
   return(best_model)
@@ -105,11 +105,11 @@ best_hyperparams_10fold <- optimize_rsf_10fold()
 #    }
 #  }
 #  
-#  print("📊 10-FOLD CV SONUÇLARI 📊")
+#  print(" 10-FOLD CV SONUÇLARI ")
 #  print(results)
 #  
 # best_model <- results[which.max(results$c_index), ]
-#  print("🚀 EN İYİ HİPERPARAMETRE KOMBİNASYONU 🚀")
+#  print(" EN İYİ HİPERPARAMETRE KOMBİNASYONU ")
 #  print(best_model)
 #  
 #  return(best_model)
