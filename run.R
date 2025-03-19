@@ -18,7 +18,3 @@ print(paste("Brier Score:", round(performance_results$brier, 4)))
 print(paste("Uno AUC:", round(performance_results$auc, 4)))
 
 
-# Hiperparametre + cv
-
-source("hyperparameter_tuning.R")
-best_hyperparams_10fold <- optimize_rsf_10fold()
