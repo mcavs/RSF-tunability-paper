@@ -5,16 +5,18 @@ source("data_split.R")
 source("modeling.R")
 source("performance.R")
 
-task <- make_task(data = train_FD001)
-split <- data_split(task = task)
+train_task <- make_task(data = train_FD001)
 
-models <- train_models(task, split)
+split <- data_split(task = train_task)
 
-performance_results <- measure_performance(models, task, split)
+rsf_result <- train_rsf_model(
+  task = train_task, 
+  mtry = 20, 
+  ntree = 2000, 
+  nodesize = 25, 
+  splitrule = "logrankscore"
+)
 
-print("Modelin Varsayılan Performansı:")
-print(paste("C-Index:", round(performance_results$c_index, 4)))
-print(paste("Brier Score:", round(performance_results$brier, 4)))
-print(paste("Uno AUC:", round(performance_results$auc, 4)))
+print(paste("C-Index:", round(rsf_result$c_index, 4)))
 
 
