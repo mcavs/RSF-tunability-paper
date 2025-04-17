@@ -1,4 +1,6 @@
-train_rsf_model <- function(task, hyp) {
+train_rsf_model <- function(task, hyp, seed = 123) {
+
+  set.seed(seed)
   
   cv_rsf_10fold <- rsmp("cv", folds = 5)
   cv_rsf_10fold$instantiate(task)
