@@ -1,4 +1,7 @@
-train_rsf_subset <- function(task, start_id, end_id) {
+train_rsf_subset <- function(task, start_id, end_id, seed = 123) {
+
+  set.seed(seed) 
+  
   hyp <- expand.grid(
     ntree     = seq(100, 2000, 200),
     mtry      = seq(1:10),
