@@ -30,7 +30,7 @@ default_params <- list(
 
 default_perf <- train_rsf_model(task_FD001, default_params)
 
-FD001_all_results <- read_csv("~/Desktop/FD001_all_results.csv")
+FD001_all_results <- read_csv("FD001_all_results.csv")
 
 overall_summary <- tune_overall(default_perf, FD001_all_results, subset_name = "FD001")
 print(overall_summary, row.names = FALSE)
