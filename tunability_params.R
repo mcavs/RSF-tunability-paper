@@ -62,3 +62,31 @@ param_FD004 <- tune_params(FD004_default, filter(all_results, data == "FD004"), 
 
 param_summary_all <- bind_rows(param_FD001, param_FD002, param_FD003, param_FD004)
 print(param_summary_all)
+
+
+
+
+############################################################################################################################################################
+
+# GRAFİK
+
+param_plot_data <- param_summary_all %>%
+  group_by(parameter) %>%
+  summarise(
+    mean_tunability = mean(tunability_cindex, na.rm = TRUE),
+    min_tunability  = min(tunability_cindex, na.rm = TRUE),
+    max_tunability  = max(tunability_cindex, na.rm = TRUE)
+  )
+
+
+library(ggplot2)
+
+ggplot(param_plot_data, aes(x = parameter, y = mean_tunability)) +
+  geom_bar(stat = "identity", fill = "#1f77b4", width = 0.6) +
+  geom_errorbar(aes(ymin = min_tunability, ymax = max_tunability), 
+                width = 0.2, color = "black") +
+  theme_minimal(base_size = 14) +
+  labs(x = "Hyperparameter",
+       y = "Tunability (C-index)",
+       title = "Tunability of Hyperparameters in the RSF Model") +
+  theme(plot.title = element_text(hjust = 0.5))
