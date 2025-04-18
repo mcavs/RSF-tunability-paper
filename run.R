@@ -30,11 +30,50 @@ default_params <- list(
 
 default_perf <- train_rsf_model(task_FD001, default_params)
 
-FD001_all_results <- read_csv("FD001_all_results.csv")
+all_results <- read_csv("all_results.csv")
 
-overall_summary <- tune_overall(default_perf, FD001_all_results, subset_name = "FD001")
-print(overall_summary, row.names = FALSE)
+overall_summary_all <- bind_rows(overall_FD001, overall_FD002, overall_FD003, overall_FD004)
+print(overall_summary_all)
 
-parameter_summary <- tune_params(default_perf, FD001_all_results, subset_name = "FD001")
-print(parameter_summary, row.names = FALSE)
+param_summary_all <- bind_rows(param_FD001, param_FD002, param_FD003, param_FD004)
+print(param_summary_all)
+
+
+
+# Grafik
+
+library(dplyr)
+library(tidyr)
+library(RColorBrewer)
+library(scales)
+
+long_results <- all_results %>%
+  pivot_longer(cols = c(ntree, mtry, nodesize, nodedepth, nsplit), 
+               names_to = "hyp", 
+               values_to = "hval") %>%
+  rename(dind = data)
+
+ggplot(long_results, aes(x = hval, y = dind, color = cindex)) +
+  geom_point(size = 3, alpha = 0.5) + 
+  facet_wrap(~hyp, ncol = 2, scales = "free_x") +  # her facet için ayrı x ekseni
+  theme_bw() + 
+  labs(x = "", y = "", color = "") + 
+  scale_color_gradientn(
+    colors = brewer.pal(7, "YlGnBu"),
+    values = rescale(c(0, 0.5, 1)),  
+    breaks = c(0, 0.25, 0.5, 0.75, 1),
+    labels = c("0", "0.25", "0.5", "0.75", "1")
+  ) +
+  theme(
+    axis.text.x      = element_text(size = 12),
+    axis.text.y      = element_text(family = "Courier", size = 12),
+    axis.title       = element_text(size = 15),
+    legend.position  = "bottom",
+    legend.title     = element_blank(),
+    legend.key.width = unit(2, "cm"), 
+    strip.text.x     = element_text(family = "Courier", size = 15)
+  )
+
+
+
 
