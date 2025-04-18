@@ -20,28 +20,27 @@ tune_params <- function(default_perf, all_results, subset_name = "FD001") {
   }
   
   tunability_ntree <- all_results %>%
-    filter(mtry == 3, nodesize == 15, nodedepth == 15, nsplit == 10, splitrule == "logrank", ntree != 500) %>%
+    filter(mtry == 3, nodesize == 15, nodedepth == 15, nsplit == 10, trimws(splitrule) == "logrank", ntree != 500) %>%
     make_tunability_row("ntree")
   
   tunability_mtry <- all_results %>%
-    filter(ntree == 500, nodesize == 15, nodedepth == 15, nsplit == 10, splitrule == "logrank", mtry != 3) %>%
+    filter(ntree == 500, nodesize == 15, nodedepth == 15, nsplit == 10, trimws(splitrule) == "logrank", mtry != 3) %>%
     make_tunability_row("mtry")
   
   tunability_nodesize <- all_results %>%
-    filter(ntree == 500, mtry == 3, nodedepth == 15, nsplit == 10, splitrule == "logrank", nodesize != 15) %>%
+    filter(ntree == 500, mtry == 3, nodedepth == 15, nsplit == 10, trimws(splitrule) == "logrank", nodesize != 15) %>%
     make_tunability_row("nodesize")
   
   tunability_nodedepth <- all_results %>%
-    filter(ntree == 500, mtry == 3, nodesize == 15, nsplit == 10, splitrule == "logrank", nodedepth != 15) %>%
+    filter(ntree == 500, mtry == 3, nodesize == 15, nsplit == 10, trimws(splitrule) == "logrank", nodedepth != 15) %>%
     make_tunability_row("nodedepth")
   
   tunability_nsplit <- all_results %>%
-    filter(ntree == 500, mtry == 3, nodesize == 15, nodedepth == 15, splitrule == "logrank", nsplit != 10) %>%
+    filter(ntree == 500, mtry == 3, nodesize == 15, nodedepth == 15, trimws(splitrule) == "logrank", nsplit != 10) %>%
     make_tunability_row("nsplit")
   
   tunability_splitrule <- all_results %>%
-    mutate(splitrule = trimws(splitrule)) %>%
-    filter(ntree == 500, mtry == 3, nodesize == 15, nodedepth == 15, nsplit == 10, splitrule != "logrank") %>%
+    filter(ntree == 500, mtry == 3, nodesize == 15, nodedepth == 15, nsplit == 10, trimws(splitrule) != "logrank") %>%
     make_tunability_row("splitrule")
   
   tunability_summary <- bind_rows(
@@ -55,3 +54,11 @@ tune_params <- function(default_perf, all_results, subset_name = "FD001") {
   
   return(tunability_summary)
 }
+
+param_FD001 <- tune_params(FD001_default, filter(all_results, data == "FD001"), "FD001")
+param_FD002 <- tune_params(FD002_default, filter(all_results, data == "FD002"), "FD002")
+param_FD003 <- tune_params(FD003_default, filter(all_results, data == "FD003"), "FD003")
+param_FD004 <- tune_params(FD004_default, filter(all_results, data == "FD004"), "FD004")
+
+param_summary_all <- bind_rows(param_FD001, param_FD002, param_FD003, param_FD004)
+print(param_summary_all)
